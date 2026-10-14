@@ -1,0 +1,35 @@
+name: Supabase Database Keep-Alive
+
+on:
+  schedule:
+    # Runs at 09:00 UTC every 3 days (Supabase free projects pause after 7 days of inactivity)
+    - cron: '0 9 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions dashboard
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database Engine
+        env:
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://vszaemdwkxftkaezcmbr.supabase.co' }}
+          SUPABASE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzemFlbWR3a3hmdGthZXpjbWJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5ODA3NzYsImV4cCI6MjEwMDU1Njc3Nn0.IWR1r_V6ntuInIJlPPnGuw3GWsULOr4fTuXxnSBx3-I' }}
+        run: |
+          echo "Executing lightweight heartbeat query to Supabase REST endpoint..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X GET \
+            "${SUPABASE_URL}/rest/v1/catalog_items?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}")
+          
+          HTTP_BODY=$(echo "$RESPONSE" | sed -e '$d')
+          HTTP_STATUS=$(echo "$RESPONSE" | tail -n1 | cut -d':' -f2)
+
+          echo "Response Body: $HTTP_BODY"
+          echo "HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+            echo "Heartbeat successful. Supabase project remains active."
+          else
+            echo "Heartbeat failed with status $HTTP_STATUS"
+            exit 1
+          fi

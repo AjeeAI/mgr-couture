@@ -30,6 +30,7 @@ Current Phase: Verification & Quality Assurance
 | **ISSUE-09** | UX / Navigation | **Placeholder Pages for Orders & Settings**: Prevented 404s for sidebar navigation items `/admin/orders` and `/admin/settings`. | Low | Completed |
 | **ISSUE-10** | Security / Defense | **HTTP Security Headers**: Added Clickjacking (DENY), MIME-sniffing (nosniff), Referrer-Policy, and Permissions-Policy in `next.config.ts`. | Medium | Completed |
 | **ISSUE-11** | UI / Aesthetics | **Catalogue Cards Rounded Borders & Darkened SKU Tag**: Added rounded borders (`rounded-2xl`) to catalogue cards and darkened high-contrast glass badge (`bg-black/80`) with gold accent to make SKU tags legible on any photo background. | Low | Completed |
+| **ISSUE-12** | Database / Infra | **Automated Supabase Heartbeat & Anti-Pause Pinger**: Created `/api/cron/keep-alive` route handler, configured daily Vercel Cron (`vercel.json`), created GitHub Actions backup workflow, and integrated manual test pinger in Admin Settings. | High | Completed |
 
 ---
 
@@ -74,9 +75,16 @@ Current Phase: Verification & Quality Assurance
    - Added `rounded-2xl` borders, subtle luxury gold borders (`border-mgr-primary/15`), and soft drop shadows to catalogue and showcase cards.
    - Darkened SKU tags to a high-contrast dark frosted glass (`bg-black/80 backdrop-blur-md text-mgr-primary border border-mgr-primary/40 rounded-full shadow-lg`), ensuring crystal-clear visibility over white dresses, bright lighting, or any background.
 
+11. **`app/api/cron/keep-alive/route.ts` & `vercel.json` & `.github/workflows/supabase-keepalive.yml`**:
+   - Added automated daily heartbeat endpoint querying Supabase to prevent the free tier 7-day auto-pause.
+   - Configured Vercel Cron (`0 8 * * *`) in `vercel.json`.
+   - Added GitHub Actions workflow fallback running every 3 days.
+   - Integrated a live heartbeat test tool in `app/admin/(portal)/settings/page.tsx`.
+
 ---
 
 ## 4. Verification Check
 - [x] Code edits applied
 - [x] Lint check (`npm run lint` — 0 errors, 0 warnings)
 - [x] Production build check (`npm run build` — 10/10 routes compiled successfully)
+- [x] Live heartbeat ping verified (1748ms, 14 items detected)
