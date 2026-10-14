@@ -1,61 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* 
-  If you are using Tailwind v4, this @theme block automatically generates 
-  your utility classes (like bg-background, text-primary, etc.) 
-*/
 @theme {
-  --color-background: #0A1128; /* Deep Cinematic Navy */
-  --color-foreground: #dde3eb; /* Soft Silver / Off-White */
+  /* MGR Couture Palette */
+  --color-mgr-background: #0A1128;
+  --color-mgr-foreground: #dde3eb;
   
-  --color-primary: #D4AF37; /* Metallic Gold */
-  --color-primary-container: #554300;
+  --color-mgr-primary: #D4AF37;
+  --color-mgr-primary-container: #554300;
   
-  --color-secondary: #38BDF8; /* Sky Blue Accent */
-  --color-secondary-container: #00799e;
+  --color-mgr-secondary: #38BDF8;
   
-  --color-surface: #0F172A; /* Darker navy for cards/elements */
-  --color-surface-variant: #1E293B;
-  --color-on-surface-variant: #94A3B8;
+  --color-mgr-surface: #0F172A;
+  --color-mgr-surface-variant: #1E293B;
+  
+  --color-mgr-text-neutral: #94A3B8;
 
-  --font-display: "Playfair Display", serif;
-  --font-body: "Inter", sans-serif;
+  /* Typography */
+  --font-display: var(--font-playfair), serif;
+  --font-body: var(--font-inter), sans-serif;
 }
 
-/* 
-  Standard CSS fallback for global element styling 
-*/
 @layer base {
-  :root {
-    --background: #0A1128;
-    --foreground: #dde3eb;
-    --primary: #D4AF37;
-    --secondary: #38BDF8;
-  }
-
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    background-color: var(--color-mgr-background);
+    color: var(--color-mgr-foreground);
+    font-family: var(--font-body);
     overflow-x: hidden;
     scroll-behavior: smooth;
   }
-
-  /* Global typography overrides if you aren't passing fonts through the Next.js layout */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display, 'Playfair Display', serif);
-  }
-
-  p, span, a, input, button, textarea, label {
-    font-family: var(--font-body, 'Inter', sans-serif);
-  }
 }
 
-/* 
-  Custom utility classes for complex animations or glows 
-  that are tedious to write inline 
-*/
 @layer utilities {
   .gold-bloom {
     box-shadow: 0 0 15px 2px rgba(212, 175, 55, 0.4);
@@ -64,9 +38,5 @@
   
   .gold-bloom:hover {
     box-shadow: 0 0 25px 4px rgba(212, 175, 55, 0.6);
-  }
-
-  .text-shadow-gold {
-    text-shadow: 0px 0px 8px rgba(212, 175, 55, 0.5);
   }
 }

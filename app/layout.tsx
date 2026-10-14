@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({ 
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
+  variable: "--font-inter",
 });
 
-const inter = Inter({ 
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-display-body", // Mapped as --font-body in your css
-  display: "swap",
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -25,10 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${playfair.variable} ${inter.variable} antialiased selection:bg-secondary/30 selection:text-secondary`}>
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
